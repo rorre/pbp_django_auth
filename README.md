@@ -15,9 +15,9 @@ and the Flutter guide for
 
 A Flutter package for helping students to implement authentication from Django web service in Flutter.
 
-## Features
+<!--## Features
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+TODO: List what your package can do. Maybe include images, gifs, or videos.-->
 
 ## Getting Started
 

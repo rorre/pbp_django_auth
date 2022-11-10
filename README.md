@@ -208,7 +208,7 @@ To use the package in your project, follow these steps below.
 
 ## Additional Information
 
-Known bug: 
+Known bug: Expired cookies is not handled for now.
 
 ## Contributors
 

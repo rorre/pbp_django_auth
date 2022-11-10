@@ -21,16 +21,18 @@ TODO: List what your package can do. Maybe include images, gifs, or videos.
 
 ## Getting Started
 
-**Create an AJAX login view in Django views.**
+### Django's Part
 
-- Run `python manage.py createapp authentication`
-- Add `"authentication"` to INSTALLED_APPS in settings.py
-- Run `pip install django-cors-headers`
-- Add `"corsheaders"` to INSTALLED_APPS in settings.py
-- Add `"corsheaders.middleware.CorsMiddleware"` to MIDDLEWARE in settings.py
-- Create a new variable in settings.py called CORS_ALLOW_ALL_ORIGINS and set the value to True (`CORS_ALLOW_ALL_ORIGINS=True`)
-- Create a new variable in settings.py called CORS_ALLOW_CREDENTIALS and set the value to True, (`CORS_ALLOW_CREDENTIALS=True`)
-- Create the following variables in settings.py:
+To use the package, you need to make asynchronous JavaScript (AJAX) login view in your Django project.
+
+1. Run `python manage.py createapp authentication` to make a new app module for handling the AJAX login.
+2. Add `"authentication"` to INSTALLED_APPS in `settings.py`.
+3. Run `pip install django-cors-headers` to install the required library.
+4. Add `"corsheaders"` to `INSTALLED_APPS` in `settings.py`.
+5. Add `"corsheaders.middleware.CorsMiddleware"` to `MIDDLEWARE` in `settings.py`.
+6. Create a new variable in `settings.py` called `CORS_ALLOW_ALL_ORIGINS` and set the value to `True` (`CORS_ALLOW_ALL_ORIGINS=True`).
+7. Create a new variable in `settings.py` called `CORS_ALLOW_CREDENTIALS` and set the value to `True`, (`CORS_ALLOW_CREDENTIALS=True`).
+8. Create the following variables in `settings.py`.
 
     ```python
     CSRF_COOKIE_SECURE = True
@@ -39,7 +41,7 @@ TODO: List what your package can do. Maybe include images, gifs, or videos.
     SESSION_COOKIE_SAMESITE = 'None'
     ```
 
-- Create a login view method in authentication/views.py
+9. Create a login view method in `authentication/views.py`.
   
     **Example Login View:**
 
@@ -75,9 +77,11 @@ TODO: List what your package can do. Maybe include images, gifs, or videos.
             }, status=401)
     ```
 
-This view will set cookies to the user and allow authenticated requests with @login_required decorator.
+This view will set cookies to the user and allow authenticated requests with `@login_required` decorator.
 
-To use this package, modify application root widget to provide the CookieRequest library to all child widgets.
+### Flutter's Part
+
+To use the package, modify application root widget to provide the CookieRequest library to all child widgets.
 
 For example, if the previous MaterialApp initialization was:
 
@@ -133,16 +137,17 @@ This creates a new provider object that will share the CookieRequest instance wi
 
 ## Usage
 
-**How to use library in Widgets:**
+To use the package in your project, follow these steps below.
 
-- First, import the provider library to the component:
+1. Import the provider library to the component:
 
     ```dart
     import 'package:provider/provider.dart';
     ...
     ```
 
-- Second, instantiate the request object by calling context.watch in the Widget build(BuildContext context) function:
+2. Instantiate the request object by calling `context.watch` in the Widget build(BuildContext context)` function.
+
     **Example:**
 
     ```dart
@@ -160,12 +165,13 @@ This creates a new provider object that will share the CookieRequest instance wi
       @override
       Widget build(BuildContext context) {
         final request = context.watch<CookieRequest>();
-        return <THE REST OF YOUR WIDGET HERE>;
+        // The rest of ypur widgets are down below
+        ...
       }
     }
     ```
 
-- To log in using the library, use the request.login(url, data) method:
+3. To log in using the package, use the `request.login(url, data)` method.
 
     ```dart
       // 'username' and 'password' should be the values of the user login form.
@@ -181,7 +187,7 @@ This creates a new provider object that will share the CookieRequest instance wi
       }
     ```
 
-- To fetch or insert data using the library, use the request.get(url) or request.post(url, data) method:
+4. To fetch or insert data using the library, use the `request.get(url)` or `request.post(url, data)` method.
 
     ```dart
     /* GET request example: */

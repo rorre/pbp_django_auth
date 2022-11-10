@@ -81,9 +81,9 @@ This view will set cookies to the user and allow authenticated requests with `@l
 
 ### Flutter's Part
 
-To use the package, modify application root widget to provide the CookieRequest library to all child widgets.
+To use the package, modify application root widget to provide the `CookieRequest` library to all child widgets by using `Provider`.
 
-For example, if the previous MaterialApp initialization was:
+For example, if the previous app initialization was:
 
 ```dart
 class MyApp extends StatelessWidget {
@@ -133,20 +133,20 @@ class MyApp extends StatelessWidget {
 }
 ```
 
-This creates a new provider object that will share the CookieRequest instance with all components in the application.
+This creates a new `Provider` object that will share the `CookieRequest` instance with all components in the application.
 
 ## Usage
 
 To use the package in your project, follow these steps below.
 
-1. Import the provider library to the component:
+1. Import the `Provider` library to the component.
 
     ```dart
     import 'package:provider/provider.dart';
     ...
     ```
 
-2. Instantiate the request object by calling `context.watch` in the Widget build(BuildContext context)` function.
+2. Instantiate the `request` object by calling `context.watch` in the Widget `build(BuildContext context)` function.
 
     **Example:**
 
@@ -211,8 +211,8 @@ from the package authors, and more.
 
 ## Contributors
 
-- Adrian Ardizza
-- Muhammad Athallah
+- [Adrian Ardizza](https://github.com/Meta502)
+- [Muhammad Athallah](https://github.com/determinedguy)
 
 <!--
 https://blog.logrocket.com/how-to-create-dart-packages-for-flutter/

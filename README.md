@@ -26,7 +26,7 @@ List what your package can do. Maybe include images, gifs, or videos.-->
 To use the package, you need to make asynchronous JavaScript (AJAX) login view in your Django project.
 
 1. Run `python manage.py createapp authentication` to make a new app module for handling the AJAX login.
-2. Add `"authentication"` to INSTALLED_APPS in `settings.py`.
+2. Add `"authentication"` to `INSTALLED_APPS` in `settings.py`.
 3. Run `pip install django-cors-headers` to install the required library.
 4. Add `"corsheaders"` to `INSTALLED_APPS` in `settings.py`.
 5. Add `"corsheaders.middleware.CorsMiddleware"` to `MIDDLEWARE` in `settings.py`.

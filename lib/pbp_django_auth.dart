@@ -80,6 +80,21 @@ class CookieRequest {
     return json.decode(response.body);
   }
 
+  Future<dynamic> postJson(String url, dynamic data) async {
+    if (kIsWeb) {
+      dynamic c = _client;
+      c.withCredentials = true;
+    }
+    // Add additional header
+    headers['Content-Type'] = 'application/json; charset=UTF-8';
+    http.Response response =
+        await _client.post(Uri.parse(url), body: data, headers: headers);
+    // Remove used additional header
+    headers.remove('Content-Type');
+    _updateCookie(response);
+    return json.decode(response.body); // Expects and returns JSON request body
+  }
+
   void _updateCookie(http.Response response) {
     String? allSetCookie = response.headers['set-cookie'];
 
@@ -125,5 +140,20 @@ class CookieRequest {
     }
 
     return cookie;
+  }
+
+  Future<dynamic> logoutAccount(String url) async {
+    http.Response response =
+      await _client.post(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      loggedIn = false;
+    } else {
+      loggedIn = true;
+    }
+
+    cookies = {};
+
+    return json.decode(response.body);
   }
 }

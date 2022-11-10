@@ -2,7 +2,7 @@ library pbp_django_auth;
 
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:flutter/foundation.dart' show debugPrint, kIsWeb;
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 
@@ -142,7 +142,7 @@ class CookieRequest {
     return cookie;
   }
 
-  Future<dynamic> logoutAccount(String url) async {
+  Future<dynamic> logout(String url) async {
     http.Response response =
       await _client.post(Uri.parse(url));
 

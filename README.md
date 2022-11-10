@@ -17,7 +17,7 @@ A Flutter package for helping students to implement authentication from Django w
 
 <!--## Features
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.-->
+List what your package can do. Maybe include images, gifs, or videos.-->
 
 ## Getting Started
 

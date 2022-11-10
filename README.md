@@ -175,8 +175,7 @@ To use the package in your project, follow these steps below.
 
     ```dart
       // 'username' and 'password' should be the values of the user login form.
-      final response = await request
-          .login("<DJANGO URL>/auth/login", {
+      final response = await request.login("<DJANGO URL>/auth/login", {
         'username': username,
         'password': password1,
       });

@@ -202,9 +202,7 @@ To use the package in your project, follow these steps below.
     // The returned response will be a Map obejct with the keys of JsonResponse.
     ```
 
-    ```
     You can also use request.postJson(url, encodedJsonData) with jsonEncode function from 'dart:convert' library to send the submitted data without manually converting the data into JSON format one by one.
-    ```
 
 ## Additional Information
 

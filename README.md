@@ -41,4 +41,5 @@ from the package authors, and more.
 
 <!--
 https://blog.logrocket.com/how-to-create-dart-packages-for-flutter/
+https://gist.github.com/Meta502/1605fdba3b141fbf67dba689e9e55498
 -->

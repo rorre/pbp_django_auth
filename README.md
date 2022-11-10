@@ -21,23 +21,192 @@ TODO: List what your package can do. Maybe include images, gifs, or videos.
 
 ## Getting Started
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+**Create an AJAX login view in Django views.**
+
+- Run `python manage.py createapp authentication`
+- Add `"authentication"` to INSTALLED_APPS in settings.py
+- Run `pip install django-cors-headers`
+- Add `"corsheaders"` to INSTALLED_APPS in settings.py
+- Add `"corsheaders.middleware.CorsMiddleware"` to MIDDLEWARE in settings.py
+- Create a new variable in settings.py called CORS_ALLOW_ALL_ORIGINS and set the value to True (`CORS_ALLOW_ALL_ORIGINS=True`)
+- Create a new variable in settings.py called CORS_ALLOW_CREDENTIALS and set the value to True, (`CORS_ALLOW_CREDENTIALS=True`)
+- Create the following variables in settings.py:
+
+    ```python
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SAMESITE = 'None'
+    SESSION_COOKIE_SAMESITE = 'None'
+    ```
+
+- Create a login view method in authentication/views.py
+  
+    **Example Login View:**
+
+    ```python
+    from django.shortcuts import render
+    from django.contrib.auth import authenticate, login as auth_login
+    from django.http import JsonResponse
+    from django.views.decorators.csrf import csrf_exempt
+
+    @csrf_exempt
+    def login(request):
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                auth_login(request, user)
+                # Redirect to a success page.
+                return JsonResponse({
+                  "status": True,
+                  "message": "Successfully Logged In!"
+                }, status=200)
+            else:
+                return JsonResponse({
+                  "status": False,
+                  "message": "Failed to Login, Account Disabled."
+                }, status=401)
+
+        else:
+            return JsonResponse({
+              "status": False,
+              "message": "Failed to Login, check your email/password."
+            }, status=401)
+    ```
+
+This view will set cookies to the user and allow authenticated requests with @login_required decorator.
+
+To use this package, modify application root widget to provide the CookieRequest library to all child widgets.
+
+For example, if the previous MaterialApp initialization was:
+
+```dart
+class MyApp extends StatelessWidget {
+    const MyApp({Key? key}) : super(key: key);
+    
+    @override
+    Widget build(BuildContext context) {
+        return MaterialApp(
+            title: 'Flutter App',
+            theme: ThemeData(
+                primarySwatch: Colors.blue,
+            ),
+            home: const MyHomePage(title: 'Flutter App'),
+            routes: {
+                "/login": (BuildContext context) => const LoginPage(),
+            },
+        );
+    }
+}
+```
+
+Change it to:
+
+```dart
+class MyApp extends StatelessWidget {
+    const MyApp({Key? key}) : super(key: key);
+
+    @override
+    Widget build(BuildContext context) {
+        return Provider(
+            create: (_) {
+                CookieRequest request = CookieRequest();
+                return request;
+            },
+            child: MaterialApp(
+                title: 'Flutter App',
+                theme: ThemeData(
+                    primarySwatch: Colors.blue,
+                ),
+                home: const MyHomePage(title: 'Flutter App'),
+                routes: {
+                    "/login": (BuildContext context) => const LoginPage(),
+                },
+            ),
+        );
+    }
+}
+```
+
+This creates a new provider object that will share the CookieRequest instance with all components in the application.
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+**How to use library in Widgets:**
 
-```dart
-const like = 'sample';
-```
+- First, import the provider library to the component:
+
+    ```dart
+    import 'package:provider/provider.dart';
+    ...
+    ```
+
+- Second, instantiate the request object by calling context.watch in the Widget build(BuildContext context) function:
+    **Example:**
+
+    ```dart
+    class _LoginPageState extends State<LoginPage> {
+      final _loginFormKey = GlobalKey<FormState>();
+      bool isPasswordVisible = false;
+      void togglePasswordView() {
+        setState(() {
+          isPasswordVisible = !isPasswordVisible;
+        });
+      }
+
+      String username = "";
+      String password1 = "";
+      @override
+      Widget build(BuildContext context) {
+        final request = context.watch<CookieRequest>();
+        return <THE REST OF YOUR WIDGET HERE>;
+      }
+    }
+    ```
+
+- To log in using the library, use the request.login(url, data) method:
+
+    ```dart
+      // 'username' and 'password' should be the values of the user login form.
+      final response = await request
+          .login("<DJANGO URL>/auth/login", {
+        'username': username,
+        'password': password1,
+      });
+      if (request.loggedIn) {
+        // Code here will run if the login succeeded.
+      } else {
+        // Code here will run if the login failed (wrong username/password).
+      }
+    ```
+
+- To fetch or insert data using the library, use the request.get(url) or request.post(url, data) method:
+
+    ```dart
+    /* GET request example: */
+    final response = await request.get(<URL TO ACCESS>);
+    // The returned response will be a Map object with the keys of the JsonResponse
+    
+    /* POST request example: */
+    final response = await request.post(<URL TO ACCESS>, {
+      "data1": "THIS IS EXAMPLE DATA",
+      "data2": "THIS IS EXAMPLE DATA 2",
+    });
+    // The data argument should be the keys of the Django form.
+    // The returned response will be a Map obejct with the keys of JsonResponse.
+    ```
 
 ## Additional Information
 
 TODO: Tell users more about the package: where to find more information, how to
 contribute to the package, how to file issues, what response they can expect
 from the package authors, and more.
+
+## Contributors
+
+- Adrian Ardizza
+- Muhammad Athallah
 
 <!--
 https://blog.logrocket.com/how-to-create-dart-packages-for-flutter/

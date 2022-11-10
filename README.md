@@ -43,7 +43,7 @@ To use the package, you need to make asynchronous JavaScript (AJAX) login view i
 
 9. Create a login view method in `authentication/views.py`.
   
-    **Example Login View:**
+    **Example Login View**
 
     ```python
     from django.shortcuts import render
@@ -148,7 +148,7 @@ To use the package in your project, follow these steps below.
 
 2. Instantiate the `request` object by calling `context.watch` in the Widget `build(BuildContext context)` function.
 
-    **Example:**
+    **Example**
 
     ```dart
     class _LoginPageState extends State<LoginPage> {

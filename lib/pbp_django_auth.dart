@@ -58,6 +58,10 @@ class CookieRequest {
     return json.decode(response.body);
   }
 
+  Map<String, String> getJsonData() {
+    return jsonData;
+  }
+
   Future<dynamic> get(String url) async {
     if (kIsWeb) {
       dynamic c = _client;

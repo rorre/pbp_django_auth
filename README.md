@@ -63,6 +63,7 @@ To use the package, you need to make asynchronous JavaScript (AJAX) login view i
                 return JsonResponse({
                   "status": True,
                   "message": "Successfully Logged In!"
+                  # Insert any extra data if you want to pass data to Flutter
                 }, status=200)
             else:
                 return JsonResponse({
@@ -139,10 +140,11 @@ This creates a new `Provider` object that will share the `CookieRequest` instanc
 
 To use the package in your project, follow these steps below.
 
-1. Import the `Provider` library to the component.
+1. Import the `Provider` library and this package to the component.
 
     ```dart
     import 'package:provider/provider.dart';
+    import 'package:pbp_django_auth/pbp_django_auth.dart';
     ...
     ```
 
@@ -165,7 +167,7 @@ To use the package in your project, follow these steps below.
       @override
       Widget build(BuildContext context) {
         final request = context.watch<CookieRequest>();
-        // The rest of ypur widgets are down below
+        // The rest of your widgets are down below
         ...
       }
     }

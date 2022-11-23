@@ -8,23 +8,24 @@ import 'package:flutter/material.dart';
 
 class CookieRequest {
   Map<String, String> headers = {};
-    Map<String, String> cookies = {};
-    final http.Client _client = http.Client();
+  Map<String, String> cookies = {};
+  Map<String, String> jsonData = {};
+  final http.Client _client = http.Client();
 
-    late SharedPreferences local;
+  late SharedPreferences local;
 
-    bool loggedIn = false;
-    bool initialized = false;
+  bool loggedIn = false;
+  bool initialized = false;
 
-    Future init(BuildContext context) async {
-      if (!initialized) {
-        local = await SharedPreferences.getInstance();
-        String? savedCookies = local.getString("cookies");
-        if (savedCookies != null) {
-          cookies = Map<String, String>.from(json.decode(savedCookies));
-          if (cookies['sessionid'] != null) {
-            loggedIn = true;
-            headers['cookie'] = _generateCookieHeader();
+  Future init(BuildContext context) async {
+    if (!initialized) {
+      local = await SharedPreferences.getInstance();
+      String? savedCookies = local.getString("cookies");
+      if (savedCookies != null) {
+        cookies = Map<String, String>.from(json.decode(savedCookies));
+        if (cookies['sessionid'] != null) {
+          loggedIn = true;
+          headers['cookie'] = _generateCookieHeader();
         }
       }
     }
@@ -48,6 +49,7 @@ class CookieRequest {
 
     if (response.statusCode == 200) {
       loggedIn = true;
+      jsonData = json.decode(response.body);
     } else {
       loggedIn = false;
     }
@@ -143,11 +145,11 @@ class CookieRequest {
   }
 
   Future<dynamic> logout(String url) async {
-    http.Response response =
-      await _client.post(Uri.parse(url));
+    http.Response response = await _client.post(Uri.parse(url));
 
     if (response.statusCode == 200) {
       loggedIn = false;
+      jsonData = {};
     } else {
       loggedIn = true;
     }

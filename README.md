@@ -214,6 +214,7 @@ Known bug: Expired cookies is not handled for now.
 
 - [Adrian Ardizza](https://github.com/Meta502)
 - [Muhammad Athallah](https://github.com/determinedguy)
+- [Sabyna Maharani](https://github.com/sabynn)
 
 <!--
 https://blog.logrocket.com/how-to-create-dart-packages-for-flutter/

@@ -1,3 +1,7 @@
+## 0.2.0
+
+- Fix LateInitializationError issue.
+
 ## 0.1.2
 
 - Add jsonData to facilitate extra data given from Django.

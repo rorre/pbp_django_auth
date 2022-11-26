@@ -17,7 +17,7 @@ class CookieRequest {
   bool loggedIn = false;
   bool initialized = false;
 
-  Future init(BuildContext context) async {
+  Future init() async {
     if (!initialized) {
       local = await SharedPreferences.getInstance();
       String? savedCookies = local.getString("cookies");
@@ -101,7 +101,10 @@ class CookieRequest {
     return json.decode(response.body); // Expects and returns JSON request body
   }
 
-  void _updateCookie(http.Response response) {
+  void _updateCookie(http.Response response) async {
+    // Solves LateInitializationError
+    await init();
+    
     String? allSetCookie = response.headers['set-cookie'];
 
     if (allSetCookie != null) {

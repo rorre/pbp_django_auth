@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter/material.dart';
 
 class CookieRequest {
   Map<String, String> headers = {};
@@ -104,7 +103,7 @@ class CookieRequest {
   void _updateCookie(http.Response response) async {
     // Solves LateInitializationError
     await init();
-    
+
     String? allSetCookie = response.headers['set-cookie'];
 
     if (allSetCookie != null) {

@@ -1,6 +1,7 @@
 ## 0.2.0
 
 - Fix LateInitializationError issue.
+- Removal of BuildContext as a required parameter.
 
 ## 0.1.2
 

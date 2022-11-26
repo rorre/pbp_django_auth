@@ -1,3 +1,7 @@
+## 0.2.1
+
+- Fix format.
+
 ## 0.2.0
 
 - Fix LateInitializationError issue.

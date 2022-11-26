@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class CookieRequest {
   Map<String, String> headers = {};
   Map<String, String> cookies = {};
-  Map<String, String> jsonData = {};
+  Map<String, dynamic> jsonData = {};
   final http.Client _client = http.Client();
 
   late SharedPreferences local;
@@ -57,7 +57,7 @@ class CookieRequest {
     return json.decode(response.body);
   }
 
-  Map<String, String> getJsonData() {
+  Map<String, dynamic> getJsonData() {
     return jsonData;
   }
 

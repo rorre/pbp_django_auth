@@ -1,3 +1,7 @@
+## 0.2.2
+
+- Fix data storage variable type.
+
 ## 0.2.1
 
 - Fix format.

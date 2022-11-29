@@ -5,9 +5,28 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:shared_preferences/shared_preferences.dart';
 
+class Cookie {
+  String name;
+  String value;
+  double? expireTimestamp;
+
+  Cookie(this.name, this.value, this.expireTimestamp);
+
+  Cookie.fromJson(Map<String, dynamic> json)
+      : name = json['name'],
+        value = json['value'],
+        expireTimestamp = json['expireTimestamp'];
+
+  Map toJson() => {
+        "name": name,
+        "value": value,
+        "expireTimestamp": expireTimestamp,
+      };
+}
+
 class CookieRequest {
   Map<String, String> headers = {};
-  Map<String, String> cookies = {};
+  Map<String, Cookie> cookies = {};
   Map<String, dynamic> jsonData = {};
   final http.Client _client = http.Client();
 
@@ -19,16 +38,29 @@ class CookieRequest {
   Future init() async {
     if (!initialized) {
       local = await SharedPreferences.getInstance();
-      String? savedCookies = local.getString("cookies");
-      if (savedCookies != null) {
-        cookies = Map<String, String>.from(json.decode(savedCookies));
-        if (cookies['sessionid'] != null) {
-          loggedIn = true;
-          headers['cookie'] = _generateCookieHeader();
-        }
+      cookies = _loadSharedPrefs();
+      if (cookies['sessionid'] != null) {
+        loggedIn = true;
+        headers['cookie'] = _generateCookieHeader();
       }
     }
     initialized = true;
+  }
+
+  Map<String, Cookie> _loadSharedPrefs() {
+    String? savedCookies = local.getString("cookies");
+    if (savedCookies == null) {
+      return {};
+    }
+
+    var localCookies =
+        Map<String, Map<String, dynamic>>.from(json.decode(savedCookies));
+    Map<String, Cookie> convCookies = {};
+    for (String keyName in localCookies.keys) {
+      convCookies[keyName] = Cookie.fromJson(localCookies[keyName]!);
+    }
+
+    return convCookies;
   }
 
   Future persist(String cookies) async {
@@ -109,12 +141,8 @@ class CookieRequest {
     if (allSetCookie != null) {
       var setCookies = allSetCookie.split(',');
 
-      for (var setCookie in setCookies) {
-        var cookies = setCookie.split(';');
-
-        for (var cookie in cookies) {
-          _setCookie(cookie);
-        }
+      for (var cookie in setCookies) {
+        _setCookie(cookie);
       }
 
       headers['cookie'] = _generateCookieHeader();
@@ -124,18 +152,45 @@ class CookieRequest {
   }
 
   void _setCookie(String rawCookie) {
-    if (rawCookie.isNotEmpty) {
-      var keyValue = rawCookie.split('=');
-      if (keyValue.length == 2) {
-        var key = keyValue[0].trim();
-        var value = keyValue[1];
-
-        // ignore keys that aren't cookies
-        if (key == 'path' || key == 'expires') return;
-
-        cookies[key] = value;
-      }
+    if (rawCookie.isEmpty) {
+      return;
     }
+
+    var cookieProps = rawCookie.split(";");
+
+    // First part of cookie will always be the key-value pair
+    var keyValue = cookieProps[0].split('=');
+    if (keyValue.length != 2) {
+      return;
+    }
+
+    String cookieName = keyValue[0].trim();
+    String cookieValue = keyValue[1];
+
+    double? cookieExpire;
+    // Iterate through every props and find max-age
+    // Expires works but Django always returns max-age, and according to MDN
+    // max-age has higher prio
+    for (var props in cookieProps.sublist(1)) {
+      var keyval = props.split("=");
+      if (keyval.length != 2) {
+        continue;
+      }
+
+      var key = keyval[0].trim().toLowerCase();
+      if (key != 'max-age') {
+        continue;
+      }
+
+      double? deltaTime = double.tryParse(keyval[1]);
+      if (deltaTime != null) {
+        cookieExpire = DateTime.now().millisecondsSinceEpoch / 1000;
+        cookieExpire += deltaTime;
+      }
+      break;
+    }
+
+    cookies[cookieName] = Cookie(cookieValue, cookieValue, cookieExpire);
   }
 
   String _generateCookieHeader() {
@@ -143,7 +198,7 @@ class CookieRequest {
 
     for (var key in cookies.keys) {
       if (cookie.isNotEmpty) cookie += ";";
-      String? newCookie = cookies[key];
+      String? newCookie = cookies[key]?.value;
       cookie += '$key=$newCookie';
     }
 

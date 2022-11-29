@@ -199,11 +199,19 @@ class CookieRequest {
   }
 
   String _generateCookieHeader() {
+    int currTime = DateTime.now().millisecondsSinceEpoch ~/ 1000;
     String cookie = "";
 
     for (var key in cookies.keys) {
       if (cookie.isNotEmpty) cookie += ";";
-      String? newCookie = cookies[key]?.value;
+      Cookie? curr = cookies[key];
+
+      if (curr == null) continue;
+      if (curr.expireTimestamp != null && currTime >= curr.expireTimestamp!) {
+        continue;
+      }
+
+      String newCookie = curr.value;
       cookie += '$key=$newCookie';
     }
 

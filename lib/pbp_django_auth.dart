@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Cookie {
   String name;
   String value;
-  double? expireTimestamp;
+  int? expireTimestamp;
 
   Cookie(this.name, this.value, this.expireTimestamp);
 
@@ -139,6 +139,11 @@ class CookieRequest {
     String? allSetCookie = response.headers['set-cookie'];
 
     if (allSetCookie != null) {
+      // Hacky way to simply ignore expires
+      allSetCookie = allSetCookie.replaceAll(
+        RegExp(r'expires=.+?;', caseSensitive: false),
+        "",
+      );
       var setCookies = allSetCookie.split(',');
 
       for (var cookie in setCookies) {
@@ -167,10 +172,11 @@ class CookieRequest {
     String cookieName = keyValue[0].trim();
     String cookieValue = keyValue[1];
 
-    double? cookieExpire;
+    int? cookieExpire;
     // Iterate through every props and find max-age
     // Expires works but Django always returns max-age, and according to MDN
     // max-age has higher prio
+
     for (var props in cookieProps.sublist(1)) {
       var keyval = props.split("=");
       if (keyval.length != 2) {
@@ -182,14 +188,13 @@ class CookieRequest {
         continue;
       }
 
-      double? deltaTime = double.tryParse(keyval[1]);
+      int? deltaTime = int.tryParse(keyval[1]);
       if (deltaTime != null) {
-        cookieExpire = DateTime.now().millisecondsSinceEpoch / 1000;
+        cookieExpire = DateTime.now().millisecondsSinceEpoch ~/ 1000;
         cookieExpire += deltaTime;
       }
       break;
     }
-
     cookies[cookieName] = Cookie(cookieValue, cookieValue, cookieExpire);
   }
 

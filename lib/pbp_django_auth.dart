@@ -151,7 +151,11 @@ class CookieRequest {
   }
 
   Future<dynamic> logout(String url) async {
-    http.Response response = await _client.post(Uri.parse(url));
+    if (kIsWeb) {
+      dynamic c = _client;
+      c.withCredentials = true;
+    }
+    http.Response response = await _client.post(Uri.parse(url), headers: headers);
 
     if (response.statusCode == 200) {
       loggedIn = false;

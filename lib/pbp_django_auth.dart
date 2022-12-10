@@ -45,7 +45,7 @@ class CookieRequest {
     http.Response response =
         await _client.post(Uri.parse(url), body: data, headers: headers);
 
-    _updateCookie(response);
+    await _updateCookie(response);
 
     if (response.statusCode == 200) {
       loggedIn = true;
@@ -53,8 +53,7 @@ class CookieRequest {
     } else {
       loggedIn = false;
     }
-
-    // Expects and returns JSON request body
+    
     return json.decode(response.body);
   }
 
@@ -71,8 +70,8 @@ class CookieRequest {
 
     http.Response response =
         await _client.get(Uri.parse(url), headers: headers);
-    _updateCookie(response);
-    // Expects and returns JSON request body
+    await _updateCookie(response);
+    
     return json.decode(response.body);
   }
 
@@ -85,8 +84,8 @@ class CookieRequest {
 
     http.Response response =
         await _client.post(Uri.parse(url), body: data, headers: headers);
-    _updateCookie(response);
-    // Expects and returns JSON request body
+    await _updateCookie(response);
+    
     return json.decode(response.body);
   }
 
@@ -104,12 +103,12 @@ class CookieRequest {
 
     // Remove used additional header
     headers.remove('Content-Type');
-    _updateCookie(response);
-    return json.decode(response.body); // Expects and returns JSON request body
+    await _updateCookie(response);
+    
+    return json.decode(response.body);
   }
 
-  void _updateCookie(http.Response response) async {
-    // Solves LateInitializationError
+  Future _updateCookie(http.Response response) async {
     await init();
 
     String? allSetCookie = response.headers['set-cookie'];
@@ -160,7 +159,12 @@ class CookieRequest {
 
   Future<dynamic> logout(String url) async {
     await init();
-    http.Response response = await _client.post(Uri.parse(url));
+    if (kIsWeb) {
+      dynamic c = _client;
+      c.withCredentials = true;
+    }
+    
+    http.Response response = await _client.post(Uri.parse(url), headers: headers);
 
     if (response.statusCode == 200) {
       loggedIn = false;

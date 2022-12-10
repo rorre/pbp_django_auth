@@ -25,7 +25,7 @@ List what your package can do. Maybe include images, gifs, or videos.-->
 
 To use the package, you need to make asynchronous JavaScript (AJAX) login view in your Django project.
 
-1. Run `python manage.py createapp authentication` to make a new app module for handling the AJAX login.
+1. Run `python manage.py startapp authentication` to make a new app module for handling the AJAX login.
 2. Add `"authentication"` to `INSTALLED_APPS` in `settings.py`.
 3. Run `pip install django-cors-headers` to install the required library.
 4. Add `"corsheaders"` to `INSTALLED_APPS` in `settings.py`.
@@ -215,6 +215,7 @@ Known bug: Expired cookies is not handled for now.
 - [Adrian Ardizza](https://github.com/Meta502)
 - [Muhammad Athallah](https://github.com/determinedguy)
 - [Sabyna Maharani](https://github.com/sabynn)
+- [Rendy](https://github.com/rorre)
 
 <!--
 https://blog.logrocket.com/how-to-create-dart-packages-for-flutter/

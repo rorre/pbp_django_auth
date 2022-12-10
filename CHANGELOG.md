@@ -1,3 +1,7 @@
+## 0.2.3
+
+- Fix updateCookie method.
+
 ## 0.2.2
 
 - Fix data storage variable type.

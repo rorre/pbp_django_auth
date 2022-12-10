@@ -36,6 +36,7 @@ class CookieRequest {
   }
 
   Future<dynamic> login(String url, dynamic data) async {
+    await init();
     if (kIsWeb) {
       dynamic c = _client;
       c.withCredentials = true;
@@ -62,10 +63,12 @@ class CookieRequest {
   }
 
   Future<dynamic> get(String url) async {
+    await init();
     if (kIsWeb) {
       dynamic c = _client;
       c.withCredentials = true;
     }
+
     http.Response response =
         await _client.get(Uri.parse(url), headers: headers);
     _updateCookie(response);
@@ -74,10 +77,12 @@ class CookieRequest {
   }
 
   Future<dynamic> post(String url, dynamic data) async {
+    await init();
     if (kIsWeb) {
       dynamic c = _client;
       c.withCredentials = true;
     }
+
     http.Response response =
         await _client.post(Uri.parse(url), body: data, headers: headers);
     _updateCookie(response);
@@ -86,14 +91,17 @@ class CookieRequest {
   }
 
   Future<dynamic> postJson(String url, dynamic data) async {
+    await init();
     if (kIsWeb) {
       dynamic c = _client;
       c.withCredentials = true;
     }
+
     // Add additional header
     headers['Content-Type'] = 'application/json; charset=UTF-8';
     http.Response response =
         await _client.post(Uri.parse(url), body: data, headers: headers);
+
     // Remove used additional header
     headers.remove('Content-Type');
     _updateCookie(response);
@@ -151,6 +159,7 @@ class CookieRequest {
   }
 
   Future<dynamic> logout(String url) async {
+    await init();
     http.Response response = await _client.post(Uri.parse(url));
 
     if (response.statusCode == 200) {

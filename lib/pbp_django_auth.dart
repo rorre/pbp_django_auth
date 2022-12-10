@@ -57,7 +57,11 @@ class CookieRequest {
         Map<String, Map<String, dynamic>>.from(json.decode(savedCookies));
     Map<String, Cookie> convCookies = {};
     for (String keyName in localCookies.keys) {
-      convCookies[keyName] = Cookie.fromJson(localCookies[keyName]!);
+      try {
+        convCookies[keyName] = Cookie.fromJson(localCookies[keyName]!);
+      } catch (_) {
+        // We do not care if the cookie is invalid, just ignore it
+      }
     }
 
     return convCookies;

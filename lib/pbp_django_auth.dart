@@ -213,6 +213,12 @@ class CookieRequest {
 
       if (curr == null) continue;
       if (curr.expireTimestamp != null && currTime >= curr.expireTimestamp!) {
+        if (curr.name == "sessionid") {
+          // Reset all states if sessionId got changed
+          loggedIn = false;
+          jsonData = {};
+          cookies = {};
+        }
         continue;
       }
 
